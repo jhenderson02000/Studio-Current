@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Current</title>
+    <meta
+      name="description"
+      content="Studio Current is a vocal-first music production platform with recording, tuning, sequencing, and mixing built into a premium studio workflow."
+    />
+    <meta name="theme-color" content="#0b0d12" />
+    <meta property="og:title" content="Studio Current" />
+    <meta
+      property="og:description"
+      content="A vocal-first DAW experience with modern tuning, sequencing, and mixing tools."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.studiocurrentdaw.com" />
+    <link rel="canonical" href="https://www.studiocurrentdaw.com" />
+    <link rel="manifest" href="./site.webmanifest" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="daw-shell">
+      <div class="scene-decor" aria-hidden="true">
+        <div class="scene-arch"></div>
+        <div class="speaker speaker-left">
+          <span class="speaker-ring speaker-ring-top"></span>
+          <span class="speaker-ring speaker-ring-bottom"></span>
+        </div>
+        <div class="speaker speaker-right">
+          <span class="speaker-ring speaker-ring-top"></span>
+          <span class="speaker-ring speaker-ring-bottom"></span>
+        </div>
+        <div class="wave-band wave-band-left"></div>
+        <div class="wave-band wave-band-right"></div>
+        <div class="equalizer-aura">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <header class="topbar glass-card">
+        <div class="brand-mini">
+          <div class="brand-lockup">
+            <span class="brand-mark">SC</span>
+            <div>
+              <p class="eyebrow">Studio Current</p>
+              <strong class="brand-title">CURRENT</strong>
+              <span class="brand-subtitle">DAW</span>
+            </div>
+          </div>
+        </div>
+
+        <nav class="nav-cluster" aria-label="Main navigation">
+          <button class="nav-chip active" data-target="session">Session</button>
+          <button class="nav-chip" data-target="workflow">Browser</button>
+          <a class="nav-chip nav-link" href="./library.html">Library</a>
+          <button class="nav-chip" data-target="plugins">Rack</button>
+          <button class="nav-chip" data-target="vocal">Channel</button>
+          <button class="nav-chip" data-target="mix">Mixer</button>
+        </nav>
+
+        <div class="transport-strip">
+          <button id="record-button" class="record-button">Record</button>
+          <button id="stop-button" class="secondary-button" disabled>Stop</button>
+          <button id="play-last-button" class="secondary-button" disabled>Play Take</button>
+          <div class="divider"></div>
+          <button id="pattern-play" class="primary-button">Play Pattern</button>
+          <button id="pattern-stop" class="secondary-button">Stop Pattern</button>
+        </div>
+
+        <div class="status-strip">
+          <div>
+            <span class="status-label">Engine</span>
+            <strong id="status-text">Idle</strong>
+          </div>
+          <div>
+            <span class="status-label">Detected note</span>
+            <strong id="pitch-text">--</strong>
+          </div>
+          <div>
+            <span class="status-label">Timer</span>
+            <strong id="recording-timer">Ready</strong>
+          </div>
+        </div>
+      </header>
+
+      <div class="workspace-grid">
+        <aside class="left-column">
+          <section class="browser-panel glass-card" id="workflow">
+            <div class="section-heading">
+              <p class="section-kicker">Browser</p>
+              <h2>Workflow and session tools</h2>
+            </div>
+
+            <div class="workflow-steps">
+              <div class="workflow-step pending" id="step-connect">
+                <span>1</span>
+                <div>
+                  <strong>Connect interface</strong>
+                  <p>Select the input source for vocals or instruments.</p>
+                </div>
+              </div>
+              <div class="workflow-step pending" id="step-preset">
+                <span>2</span>
+                <div>
+                  <strong>Choose a preset</strong>
+                  <p>Load a channel starting point before recording.</p>
+                </div>
+              </div>
+              <div class="workflow-step pending" id="step-record">
+                <span>3</span>
+                <div>
+                  <strong>Capture the take</strong>
+                  <p>Record first, then fine-tune the chain.</p>
+                </div>
+              </div>
+              <div class="workflow-step pending" id="step-review">
+                <span>4</span>
+                <div>
+                  <strong>Review in the mixer</strong>
+                  <p>Playback, tune, balance, and bounce.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="assistant-note">
+              <span class="status-label">Assistant</span>
+              <p id="assistant-text">Start with a preset, connect your interface, and record before touching every control.</p>
+            </div>
+
+            <div class="brand-note">
+              <span class="status-label">Identity</span>
+              <p>Studio Current stays lean like a utility-first DAW, with fast startup, practical routing, and a professional vocal workflow.</p>
+            </div>
+
+            <div class="quick-start-stack">
+              <button class="quick-start-card" data-preset="clean-vocal">
+                <strong>Lead Vocal</strong>
+                <p>Balanced chain for modern vocal sessions.</p>
+              </button>
+              <button class="quick-start-card" data-preset="pop-tune">
+                <strong>Pop Hard Tune</strong>
+                <p>Tighter retune behavior and a brighter tone.</p>
+              </button>
+              <button class="quick-start-card" data-preset="instrument-di">
+                <strong>DI Instrument</strong>
+                <p>Cleaner path for guitar, bass, or keys.</p>
+              </button>
+              <button class="quick-start-card" data-preset="podcast-clean">
+                <strong>Podcast Voice</strong>
+                <p>Speech-focused cleanup with minimal tuning.</p>
+              </button>
+            </div>
+          </section>
+
+          <section class="device-panel glass-card" id="session">
+            <div class="section-heading">
+              <p class="section-kicker">Input</p>
+              <h2>Audio interface and monitoring</h2>
+            </div>
+
+            <label class="field">
+              <span>Input device</span>
+              <select id="input-device"></select>
+            </label>
+
+            <div class="button-row">
+              <button id="connect-button" class="primary-button">Connect Input</button>
+              <button id="refresh-button" class="secondary-button">Refresh</button>
+            </div>
+
+            <label class="toggle">
+              <input type="checkbox" id="monitor-toggle" checked />
+              <span>Live monitor through channel strip</span>
+            </label>
+
+            <div class="meter-block">
+              <div class="meter-header">
+                <span>Input meter</span>
+                <span id="level-text">-inf dB</span>
+              </div>
+              <div class="meter-track">
+                <div id="level-fill" class="meter-fill"></div>
+              </div>
+            </div>
+          </section>
+        </aside>
+
+        <main class="center-column">
+          <section class="playlist-panel glass-card">
+            <div class="section-heading">
+              <p class="section-kicker">Playlist</p>
+              <h2>Arrangement and edit timeline</h2>
+            </div>
+
+            <div class="signature-stage" aria-hidden="true">
+              <div class="wave-crown">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="signature-lockup">
+                <strong class="signature-current">CURRENT DAW</strong>
+                <span class="signature-daw">Light. Fast. Session-ready.</span>
+              </div>
+              <div class="signature-glow signature-glow-left"></div>
+              <div class="signature-glow signature-glow-right"></div>
+            </div>
+
+            <div class="timeline-ruler">
+              <span>1</span>
+              <span>2</span>
+              <span>3</span>
+              <span>4</span>
+              <span>5</span>
+              <span>6</span>
+              <span>7</span>
+              <span>8</span>
+            </div>
+
+            <div class="playlist-browser">
+              <button class="clip-pill accent-coral" draggable="true" data-clip="Lead Vox">Lead Vox</button>
+              <button class="clip-pill accent-gold" draggable="true" data-clip="Hook Stack">Hook Stack</button>
+              <button class="clip-pill accent-teal" draggable="true" data-clip="Drum Loop">Drum Loop</button>
+              <button class="clip-pill accent-coral" draggable="true" data-clip="Bass Pocket">Bass Pocket</button>
+              <button class="clip-pill accent-gold" draggable="true" data-clip="FX Lift">FX Lift</button>
+            </div>
+
+            <div class="playlist-lanes">
+              <div class="playlist-lane">
+                <div class="lane-meta">
+                  <strong>Lead Vocal</strong>
+                  <span>Audio 1</span>
+                </div>
+                <div class="timeline-row" data-lane="lead"></div>
+              </div>
+              <div class="playlist-lane">
+                <div class="lane-meta">
+                  <strong>Beat Rack</strong>
+                  <span>Pattern 1</span>
+                </div>
+                <div class="timeline-row" data-lane="beat"></div>
+              </div>
+              <div class="playlist-lane">
+                <div class="lane-meta">
+                  <strong>Bass</strong>
+                  <span>Pattern 2</span>
+                </div>
+                <div class="timeline-row" data-lane="bass"></div>
+              </div>
+              <div class="playlist-lane">
+                <div class="lane-meta">
+                  <strong>FX</strong>
+                  <span>Audio 2</span>
+                </div>
+                <div class="timeline-row" data-lane="fx"></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="pattern-panel glass-card">
+            <div class="section-heading">
+              <p class="section-kicker">Channel Rack</p>
+              <h2>Pattern sequencer and groove builder</h2>
+            </div>
+
+            <div class="sequencer-toolbar">
+              <label class="bpm-field">
+                <span>BPM</span>
+                <input type="range" id="bpm-control" min="70" max="170" value="118" />
+                <output id="bpm-value">118</output>
+              </label>
+            </div>
+
+            <div class="step-grid">
+              <div class="step-row" data-lane="kick">
+                <div class="step-label">
+                  <strong>Kick</strong>
+                  <span>Insert 1</span>
+                </div>
+                <div class="step-buttons"></div>
+              </div>
+              <div class="step-row" data-lane="snare">
+                <div class="step-label">
+                  <strong>Snare</strong>
+                  <span>Insert 2</span>
+                </div>
+                <div class="step-buttons"></div>
+              </div>
+              <div class="step-row" data-lane="hat">
+                <div class="step-label">
+                  <strong>Hat</strong>
+                  <span>Insert 3</span>
+                </div>
+                <div class="step-buttons"></div>
+              </div>
+              <div class="step-row" data-lane="keys">
+                <div class="step-label">
+                  <strong>Keys</strong>
+                  <span>Insert 4</span>
+                </div>
+                <div class="step-buttons"></div>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <aside class="right-column">
+          <section class="channel-panel glass-card" id="vocal">
+            <div class="section-heading">
+              <p class="section-kicker">Channel Strip</p>
+              <h2>Lead vocal insert chain</h2>
+            </div>
+
+            <div class="preset-toolbar">
+              <button class="preset-pill active" data-preset="clean-vocal">Clean Vocal</button>
+              <button class="preset-pill" data-preset="pop-tune">Pop Tune</button>
+              <button class="preset-pill" data-preset="warm-condenser">Warm Condenser</button>
+              <button class="preset-pill" data-preset="instrument-di">Instrument DI</button>
+              <button class="preset-pill" data-preset="podcast-clean">Podcast Clean</button>
+            </div>
+
+            <p class="helper-text" id="preset-description">
+              Clean Vocal keeps the chain balanced so most singers can record immediately without fighting the software.
+            </p>
+
+            <div class="control-list">
+              <label class="slider-field">
+                <span>Noise gate</span>
+                <input type="range" id="gate-control" min="0" max="100" value="28" />
+                <output id="gate-value">28%</output>
+              </label>
+              <label class="slider-field">
+                <span>Clarity de-ess</span>
+                <input type="range" id="deess-control" min="0" max="100" value="42" />
+                <output id="deess-value">42%</output>
+              </label>
+              <label class="slider-field">
+                <span>Pitch assist feel</span>
+                <input type="range" id="pitch-control" min="0" max="100" value="58" />
+                <output id="pitch-value">58%</output>
+              </label>
+              <label class="slider-field">
+                <span>Condenser shine</span>
+                <input type="range" id="air-control" min="0" max="100" value="64" />
+                <output id="air-value">64%</output>
+              </label>
+              <label class="slider-field">
+                <span>Glue compression</span>
+                <input type="range" id="comp-control" min="0" max="100" value="48" />
+                <output id="comp-value">48%</output>
+              </label>
+            </div>
+
+            <div class="tune-panel">
+              <div class="section-heading compact-heading">
+                <p class="section-kicker">Tune Assist</p>
+                <h2>Retune module</h2>
+              </div>
+
+              <div class="mode-row">
+                <button class="mode-pill active" type="button" data-mode="natural">Natural</button>
+                <button class="mode-pill" type="button" data-mode="hard">Hard Tune</button>
+              </div>
+
+              <div class="select-grid">
+                <label class="field">
+                  <span>Key</span>
+                  <select id="key-select">
+                    <option value="C">C</option>
+                    <option value="C#">C#</option>
+                    <option value="D">D</option>
+                    <option value="D#">D#</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="F#">F#</option>
+                    <option value="G">G</option>
+                    <option value="G#">G#</option>
+                    <option value="A">A</option>
+                    <option value="A#">A#</option>
+                    <option value="B">B</option>
+                  </select>
+                </label>
+                <label class="field">
+                  <span>Scale</span>
+                  <select id="scale-select">
+                    <option value="major">Major</option>
+                    <option value="minor">Minor</option>
+                    <option value="pentatonic">Pentatonic</option>
+                    <option value="chromatic">Chromatic</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="control-list compact-list">
+                <label class="slider-field">
+                  <span>Retune speed</span>
+                  <input type="range" id="retune-control" min="0" max="100" value="68" />
+                  <output id="retune-value">68%</output>
+                </label>
+                <label class="slider-field">
+                  <span>Humanize</span>
+                  <input type="range" id="humanize-control" min="0" max="100" value="34" />
+                  <output id="humanize-value">34%</output>
+                </label>
+              </div>
+
+              <div class="target-panel">
+                <span class="status-label">Target note</span>
+                <strong id="target-note">C major ready</strong>
+                <p id="tune-summary">Natural mode keeps note guidance smoother and less robotic.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="plugin-panel glass-card" id="plugins">
+            <div class="section-heading">
+              <p class="section-kicker">Insert Rack</p>
+              <h2>Built-in modules and library access</h2>
+            </div>
+
+            <div class="plugin-library-callout">
+              <strong>Need more sounds?</strong>
+              <p>Open the Library page for loops, plugin collections, vocal chains, and downloadable customer packs.</p>
+              <a class="primary-button inline-link" href="./library.html">Open Library</a>
+            </div>
+
+            <div class="plugin-cards">
+              <div class="plugin-card">
+                <strong>Velvet Gate</strong>
+                <p>Utility cleanup at the top of the chain.</p>
+              </div>
+              <div class="plugin-card">
+                <strong>Silk De-Esser</strong>
+                <p>Tames consonants before they get harsh.</p>
+              </div>
+              <div class="plugin-card">
+                <strong>Pitch Pilot</strong>
+                <p>Scale-aware tuning guidance with retune control.</p>
+              </div>
+              <div class="plugin-card">
+                <strong>Condenser Air</strong>
+                <p>Adds brightness and expensive-sounding presence.</p>
+              </div>
+              <div class="plugin-card">
+                <strong>Tube Glow</strong>
+                <p>Soft drive and harmonic edge for leads.</p>
+              </div>
+              <div class="plugin-card">
+                <strong>Room Bloom</strong>
+                <p>Space and polish for fast demo sessions.</p>
+              </div>
+            </div>
+          </section>
+        </aside>
+      </div>
+
+      <footer class="bottom-dock glass-card" id="mix">
+        <section class="scope-panel">
+          <div class="section-heading compact-heading">
+            <p class="section-kicker">Scope</p>
+            <h2>Master view</h2>
+          </div>
+          <canvas id="visualizer" width="960" height="260" aria-label="Live waveform visualizer"></canvas>
+          <div class="take-zone">
+            <div id="take-empty" class="take-empty">No takes recorded yet. Connect input, record a pass, then review it here.</div>
+            <div id="take-player" class="take-player hidden">
+              <audio id="take-audio" controls></audio>
+              <a id="download-link" class="secondary-button download-link" download="studio-current-take.webm">Download Take</a>
+            </div>
+          </div>
+        </section>
+
+        <section class="mixer-panel">
+          <div class="section-heading compact-heading">
+            <p class="section-kicker">Mixer</p>
+            <h2>Insert levels</h2>
+          </div>
+
+          <div class="mixer-strips" id="mixer-strips">
+            <div class="mixer-strip" data-strip="vocal">
+              <span class="strip-name">Vocal</span>
+              <button class="strip-toggle active" data-action="mute">Mute</button>
+              <input class="strip-fader" data-strip="vocal" type="range" min="0" max="100" value="92" orient="vertical" />
+              <span class="strip-readout" data-readout="vocal">92%</span>
+            </div>
+            <div class="mixer-strip" data-strip="kick">
+              <span class="strip-name">Kick</span>
+              <button class="strip-toggle active" data-action="mute">Mute</button>
+              <input class="strip-fader" data-strip="kick" type="range" min="0" max="100" value="84" orient="vertical" />
+              <span class="strip-readout" data-readout="kick">84%</span>
+            </div>
+            <div class="mixer-strip" data-strip="snare">
+              <span class="strip-name">Snare</span>
+              <button class="strip-toggle active" data-action="mute">Mute</button>
+              <input class="strip-fader" data-strip="snare" type="range" min="0" max="100" value="76" orient="vertical" />
+              <span class="strip-readout" data-readout="snare">76%</span>
+            </div>
+            <div class="mixer-strip" data-strip="hat">
+              <span class="strip-name">Hat</span>
+              <button class="strip-toggle active" data-action="mute">Mute</button>
+              <input class="strip-fader" data-strip="hat" type="range" min="0" max="100" value="62" orient="vertical" />
+              <span class="strip-readout" data-readout="hat">62%</span>
+            </div>
+            <div class="mixer-strip" data-strip="keys">
+              <span class="strip-name">Keys</span>
+              <button class="strip-toggle active" data-action="mute">Mute</button>
+              <input class="strip-fader" data-strip="keys" type="range" min="0" max="100" value="68" orient="vertical" />
+              <span class="strip-readout" data-readout="keys">68%</span>
+            </div>
+            <div class="mixer-strip" data-strip="master">
+              <span class="strip-name">Master</span>
+              <button class="strip-toggle active" data-action="mute">Mute</button>
+              <input class="strip-fader" data-strip="master" type="range" min="0" max="100" value="88" orient="vertical" />
+              <span class="strip-readout" data-readout="master">88%</span>
+            </div>
+          </div>
+        </section>
+      </footer>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

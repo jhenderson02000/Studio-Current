@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Current Library</title>
+    <meta
+      name="description"
+      content="Browse Studio Current plugins, loops, presets, and production packs for vocals, beatmaking, and session work."
+    />
+    <meta name="theme-color" content="#20242b" />
+    <link rel="manifest" href="./site.webmanifest" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="library-body">
+    <div class="library-shell">
+      <header class="topbar glass-card library-topbar">
+        <div class="brand-mini">
+          <div class="brand-lockup">
+            <span class="brand-mark">SC</span>
+            <div>
+              <p class="eyebrow">Studio Current</p>
+              <strong class="brand-title library-brand-title">Library</strong>
+              <span class="brand-subtitle library-brand-subtitle">Plugins, Loops, Packs</span>
+            </div>
+          </div>
+        </div>
+
+        <nav class="nav-cluster" aria-label="Library navigation">
+          <a class="nav-chip nav-link" href="./index.html">Back To DAW</a>
+          <a class="nav-chip nav-link" href="#featured">Featured</a>
+          <a class="nav-chip nav-link" href="#plugins-market">Plugins</a>
+          <a class="nav-chip nav-link" href="#loops-market">Loops</a>
+          <a class="nav-chip nav-link" href="#packs-market">Packs</a>
+        </nav>
+
+        <div class="library-summary">
+          <div>
+            <span class="status-label">Curated for</span>
+            <strong>Vocals, beatmaking, fast sessions</strong>
+          </div>
+        </div>
+      </header>
+
+      <main class="library-grid">
+        <section class="library-hero glass-card" id="featured">
+          <div class="section-heading">
+            <p class="section-kicker">Marketplace</p>
+            <h2>Professional tools without bloat</h2>
+          </div>
+          <p class="library-copy">
+            Studio Current keeps the DAW fast and focused, while the Library gives customers a dedicated place to browse plugins, loops, presets, and production packs without crowding the core workspace.
+          </p>
+          <div class="market-badges">
+            <span>Low CPU chains</span>
+            <span>Loop-ready workflow</span>
+            <span>Customer content packs</span>
+            <span>Vocal-first collections</span>
+          </div>
+          <div class="library-controls">
+            <label class="library-search">
+              <span>Search Library</span>
+              <input id="library-search" type="search" placeholder="Search plugins, loops, packs..." />
+            </label>
+            <div class="genre-tabs" aria-label="Genre filters">
+              <button class="genre-tab active" type="button" data-genre="all">All</button>
+              <button class="genre-tab" type="button" data-genre="vocal">Vocal</button>
+              <button class="genre-tab" type="button" data-genre="beatmaking">Beatmaking</button>
+              <button class="genre-tab" type="button" data-genre="voice">Voice</button>
+              <button class="genre-tab" type="button" data-genre="live">Live</button>
+            </div>
+          </div>
+          <p class="library-results" id="library-results">Showing all library items.</p>
+        </section>
+
+        <section class="market-section glass-card" id="plugins-market">
+          <div class="section-heading">
+            <p class="section-kicker">Plugins</p>
+            <h2>Mix-ready modules and chains</h2>
+          </div>
+          <div class="market-grid">
+            <article class="market-card library-item" data-kind="plugin" data-genre="vocal" data-title="Vocal Precision Bundle" data-keywords="vocal tuning gate de-ess lead vocal precision bundle">
+              <strong>Vocal Precision Bundle</strong>
+              <p>Gate, de-ess, hard-tune assist, and clarity chain built for lead vocals.</p>
+              <div class="market-meta">
+                <span>Starter</span>
+                <span>Low CPU</span>
+              </div>
+              <div class="market-actions">
+                <span class="install-state">Ready to install</span>
+                <button class="primary-button library-action" type="button" data-action="install" data-item="Vocal Precision Bundle">Install</button>
+              </div>
+            </article>
+            <article class="market-card library-item" data-kind="plugin" data-genre="beatmaking" data-title="Current Color FX" data-keywords="creative stereo spread saturation mix bus hook color fx">
+              <strong>Current Color FX</strong>
+              <p>Saturation, stereo spread, air shaping, and widening tools for modern hooks.</p>
+              <div class="market-meta">
+                <span>Creative</span>
+                <span>Mix Bus Safe</span>
+              </div>
+              <div class="market-actions">
+                <span class="install-state">Ready to install</span>
+                <button class="primary-button library-action" type="button" data-action="install" data-item="Current Color FX">Install</button>
+              </div>
+            </article>
+            <article class="market-card library-item" data-kind="plugin" data-genre="voice" data-title="Podcast Clean Rack" data-keywords="podcast clean rack voiceover speech narrative cleanup">
+              <strong>Podcast Clean Rack</strong>
+              <p>Speech cleanup modules for podcasts, voiceover, and narrative sessions.</p>
+              <div class="market-meta">
+                <span>Voice</span>
+                <span>Fast Setup</span>
+              </div>
+              <div class="market-actions">
+                <span class="install-state">Ready to install</span>
+                <button class="primary-button library-action" type="button" data-action="install" data-item="Podcast Clean Rack">Install</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="market-section glass-card" id="loops-market">
+          <div class="section-heading">
+            <p class="section-kicker">Loops</p>
+            <h2>Session-ready ideas by vibe</h2>
+          </div>
+          <div class="market-grid">
+            <article class="market-card library-item" data-kind="loop" data-genre="vocal" data-title="Midnight Vox Loops" data-keywords="midnight vox loops r&b melodic rap topline doubles harmony">
+              <strong>Midnight Vox Loops</strong>
+              <p>Moody topline loops, doubles, and harmony beds for melodic rap and R&amp;B.</p>
+              <div class="market-meta">
+                <span>R&amp;B</span>
+                <span>120-145 BPM</span>
+              </div>
+              <div class="market-actions">
+                <span class="install-state">Ready to download</span>
+                <button class="primary-button library-action" type="button" data-action="download" data-item="Midnight Vox Loops">Download</button>
+              </div>
+            </article>
+            <article class="market-card library-item" data-kind="loop" data-genre="beatmaking" data-title="Current Drums" data-keywords="current drums trap kicks hats snares percussion beatmaking">
+              <strong>Current Drums</strong>
+              <p>Crisp kicks, hats, snare loops, and bounce-ready percussion beds.</p>
+              <div class="market-meta">
+                <span>Trap</span>
+                <span>Drum Core</span>
+              </div>
+              <div class="market-actions">
+                <span class="install-state">Ready to download</span>
+                <button class="primary-button library-action" type="button" data-action="download" data-item="Current Drums">Download</button>
+              </div>
+            </article>
+            <article class="market-card library-item" data-kind="loop" data-genre="live" data-title="Guitar Atmospheres" data-keywords="guitar atmospheres ambient songwriting clean di live guitar loops">
+              <strong>Guitar Atmospheres</strong>
+              <p>Clean DI-friendly guitar loops that fit vocal production without clutter.</p>
+              <div class="market-meta">
+                <span>Ambient</span>
+                <span>Songwriting</span>
+              </div>
+              <div class="market-actions">
+                <span class="install-state">Ready to download</span>
+                <button class="primary-button library-action" type="button" data-action="download" data-item="Guitar Atmospheres">Download</button>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="market-section glass-card" id="packs-market">
+          <div class="section-heading">
+            <p class="section-kicker">Available Packs</p>
+            <h2>Customer collections and add-ons</h2>
+          </div>
+          <div class="packs-table">
+            <div class="pack-row pack-head">
+              <span>Pack</span>
+              <span>Use Case</span>
+              <span>Contents</span>
+              <span>Tier</span>
+            </div>
+            <div class="pack-row library-item" data-kind="pack" data-genre="vocal" data-title="Launch Vocal Pack" data-keywords="launch vocal pack presets chains doubles hooks lead vocal sessions">
+              <span>Launch Vocal Pack</span>
+              <span>Lead vocal sessions</span>
+              <span>Presets, chains, doubles, hooks</span>
+              <span class="pack-tier">Included</span>
+              <button class="secondary-button library-action pack-action" type="button" data-action="download" data-item="Launch Vocal Pack">Download</button>
+            </div>
+            <div class="pack-row library-item" data-kind="pack" data-genre="beatmaking" data-title="Current Loop Vault" data-keywords="current loop vault drums melodies bass loops beat production">
+              <span>Current Loop Vault</span>
+              <span>Beat production</span>
+              <span>Drums, melodies, bass loops</span>
+              <span class="pack-tier">Creator</span>
+              <button class="secondary-button library-action pack-action" type="button" data-action="download" data-item="Current Loop Vault">Download</button>
+            </div>
+            <div class="pack-row library-item" data-kind="pack" data-genre="voice" data-title="Engineer Toolkit" data-keywords="engineer toolkit mix workflow templates buses metering presets pro">
+              <span>Engineer Toolkit</span>
+              <span>Mix workflow</span>
+              <span>Templates, buses, metering presets</span>
+              <span class="pack-tier">Pro</span>
+              <button class="secondary-button library-action pack-action" type="button" data-action="install" data-item="Engineer Toolkit">Install</button>
+            </div>
+            <div class="pack-row library-item" data-kind="pack" data-genre="live" data-title="Worship and Live Keys" data-keywords="worship live keys pads pianos transitions stems band production">
+              <span>Worship and Live Keys</span>
+              <span>Band production</span>
+              <span>Pads, pianos, transitions, stems</span>
+              <span class="pack-tier">Add-on</span>
+              <button class="secondary-button library-action pack-action" type="button" data-action="download" data-item="Worship and Live Keys">Download</button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="./library.js"></script>
+  </body>
+</html>

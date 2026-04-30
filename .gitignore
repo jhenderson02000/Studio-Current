@@ -1,0 +1,10 @@
+server.log
+server-error.log
+browser-inspect/
+.vercel
+.netlify
+node_modules
+dist
+build
+.DS_Store
+Thumbs.db

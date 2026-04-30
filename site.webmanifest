@@ -1,0 +1,10 @@
+{
+  "name": "Studio Current",
+  "short_name": "StudioCurrent",
+  "description": "A vocal-first music production platform with recording, tuning, sequencing, and mixing tools.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b0d12",
+  "theme_color": "#0b0d12",
+  "icons": []
+}
