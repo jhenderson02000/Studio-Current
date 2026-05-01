@@ -3,6 +3,9 @@ const elements = {
   connectButton: document.querySelector("#connect-button"),
   refreshButton: document.querySelector("#refresh-button"),
   monitorToggle: document.querySelector("#monitor-toggle"),
+  monitorLevel: document.querySelector("#monitor-level"),
+  monitorLevelValue: document.querySelector("#monitor-level-value"),
+  monitorStatus: document.querySelector("#monitor-status"),
   statusText: document.querySelector("#status-text"),
   pitchText: document.querySelector("#pitch-text"),
   recordButton: document.querySelector("#record-button"),
@@ -171,6 +174,23 @@ function updateTuneSummary() {
   const humanizePercent = Math.round(tuningState.humanize * 100);
   const modeLabel = tuningState.mode === "hard" ? "Hard Tune" : "Natural";
   elements.tuneSummary.textContent = `${modeLabel} mode in ${tuningState.key} ${tuningState.scale} with ${retunePercent}% retune speed and ${humanizePercent}% humanize.`;
+}
+
+function updateMonitorState() {
+  const level = Number(elements.monitorLevel?.value || 0) / 100;
+  const enabled = Boolean(elements.monitorToggle?.checked);
+
+  if (elements.monitorLevelValue) {
+    elements.monitorLevelValue.textContent = `${Math.round(level * 100)}%`;
+  }
+
+  if (elements.monitorStatus) {
+    elements.monitorStatus.textContent = enabled ? `Live ${Math.round(level * 100)}%` : "Monitor off";
+  }
+
+  if (audioState.monitorGain && audioState.context) {
+    audioState.monitorGain.gain.setTargetAtTime(enabled ? level : 0, audioState.context.currentTime, 0.01);
+  }
 }
 
 function noteNumberToName(noteNumber) {
@@ -651,6 +671,7 @@ function teardownAudio() {
       sequencerState.lanes[lane].gain = null;
     });
   }
+  updateMonitorState();
   updateWorkflowUI();
 }
 
@@ -700,7 +721,7 @@ async function connectInput() {
     analyser.fftSize = 2048;
 
     const monitorGain = context.createGain();
-    monitorGain.gain.value = elements.monitorToggle.checked ? 1 : 0;
+    monitorGain.gain.value = 0;
 
     source.connect(highPass);
     highPass.connect(gateGain);
@@ -710,7 +731,7 @@ async function connectInput() {
     tubeDrive.connect(compressor);
     compressor.connect(outputGain);
     outputGain.connect(analyser);
-    analyser.connect(monitorGain);
+    outputGain.connect(monitorGain);
     monitorGain.connect(context.destination);
 
     const recorderDestination = context.createMediaStreamDestination();
@@ -738,9 +759,10 @@ async function connectInput() {
 
     applyEffectSettings();
     applyMixerState();
+    updateMonitorState();
     startVisualization();
     updateStatus("Input connected");
-    elements.assistantText.textContent = "Levels are live now. Do a short test phrase, then hit Record when the meter feels healthy.";
+    elements.assistantText.textContent = "Levels and headphone monitoring are live now. Do a short test phrase, set monitor level, then hit Record when the meter feels healthy.";
     updateWorkflowUI();
     await listDevices();
   } catch (error) {
@@ -951,11 +973,8 @@ function attachEvents() {
   elements.patternPlay.addEventListener("click", startPatternPlayback);
   elements.patternStop.addEventListener("click", stopPatternPlayback);
 
-  elements.monitorToggle.addEventListener("change", () => {
-    if (audioState.monitorGain) {
-      audioState.monitorGain.gain.value = elements.monitorToggle.checked ? 1 : 0;
-    }
-  });
+  elements.monitorToggle.addEventListener("change", updateMonitorState);
+  elements.monitorLevel.addEventListener("input", updateMonitorState);
 
   elements.bpmControl.addEventListener("input", () => {
     sequencerState.bpm = Number(elements.bpmControl.value);
@@ -1140,6 +1159,7 @@ async function init() {
   updateOutputLabels();
   attachEvents();
   applyPreset(selectedPreset);
+  updateMonitorState();
   elements.bpmValue.textContent = String(sequencerState.bpm);
   elements.stripFaders.forEach((fader) => {
     updateMixerReadout(fader.dataset.strip, Number(fader.value) / 100);

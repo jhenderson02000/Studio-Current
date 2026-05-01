@@ -15,8 +15,8 @@
       content="A vocal-first DAW experience with modern tuning, sequencing, and mixing tools."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.studiocurrentdaw.com" />
-    <link rel="canonical" href="https://www.studiocurrentdaw.com" />
+    <meta property="og:url" content="https://studio-current-1cicjp279-jhenderson02000-2237s-projects.vercel.app" />
+    <link rel="canonical" href="https://studio-current-1cicjp279-jhenderson02000-2237s-projects.vercel.app" />
     <link rel="manifest" href="./site.webmanifest" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
@@ -100,64 +100,76 @@
               <h2>Workflow and session tools</h2>
             </div>
 
-            <div class="workflow-steps">
-              <div class="workflow-step pending" id="step-connect">
-                <span>1</span>
-                <div>
-                  <strong>Connect interface</strong>
-                  <p>Select the input source for vocals or instruments.</p>
+            <div class="browser-stack">
+              <div class="browser-group">
+                <span class="status-label">Source Browser</span>
+                <div class="browser-list">
+                  <button class="browser-item is-active" type="button">Voice templates</button>
+                  <button class="browser-item" type="button">Input chains</button>
+                  <button class="browser-item" type="button">Drum starters</button>
+                  <button class="browser-item" type="button">Tracking presets</button>
                 </div>
               </div>
-              <div class="workflow-step pending" id="step-preset">
-                <span>2</span>
-                <div>
-                  <strong>Choose a preset</strong>
-                  <p>Load a channel starting point before recording.</p>
-                </div>
-              </div>
-              <div class="workflow-step pending" id="step-record">
-                <span>3</span>
-                <div>
-                  <strong>Capture the take</strong>
-                  <p>Record first, then fine-tune the chain.</p>
-                </div>
-              </div>
-              <div class="workflow-step pending" id="step-review">
-                <span>4</span>
-                <div>
-                  <strong>Review in the mixer</strong>
-                  <p>Playback, tune, balance, and bounce.</p>
-                </div>
-              </div>
-            </div>
 
-            <div class="assistant-note">
-              <span class="status-label">Assistant</span>
-              <p id="assistant-text">Start with a preset, connect your interface, and record before touching every control.</p>
-            </div>
+              <div class="workflow-steps">
+                <div class="workflow-step pending" id="step-connect">
+                  <span>1</span>
+                  <div>
+                    <strong>Connect interface</strong>
+                    <p>Select the input source for vocals or instruments.</p>
+                  </div>
+                </div>
+                <div class="workflow-step pending" id="step-preset">
+                  <span>2</span>
+                  <div>
+                    <strong>Choose a preset</strong>
+                    <p>Load a channel starting point before recording.</p>
+                  </div>
+                </div>
+                <div class="workflow-step pending" id="step-record">
+                  <span>3</span>
+                  <div>
+                    <strong>Capture the take</strong>
+                    <p>Record first, then fine-tune the chain.</p>
+                  </div>
+                </div>
+                <div class="workflow-step pending" id="step-review">
+                  <span>4</span>
+                  <div>
+                    <strong>Review in the mixer</strong>
+                    <p>Playback, tune, balance, and bounce.</p>
+                  </div>
+                </div>
+              </div>
 
-            <div class="brand-note">
-              <span class="status-label">Identity</span>
-              <p>Studio Current stays lean like a utility-first DAW, with fast startup, practical routing, and a professional vocal workflow.</p>
-            </div>
+              <div class="assistant-note">
+                <span class="status-label">Assistant</span>
+                <p id="assistant-text">Start with a preset, connect your interface, and record before touching every control.</p>
+              </div>
 
-            <div class="quick-start-stack">
-              <button class="quick-start-card" data-preset="clean-vocal">
-                <strong>Lead Vocal</strong>
-                <p>Balanced chain for modern vocal sessions.</p>
-              </button>
-              <button class="quick-start-card" data-preset="pop-tune">
-                <strong>Pop Hard Tune</strong>
-                <p>Tighter retune behavior and a brighter tone.</p>
-              </button>
-              <button class="quick-start-card" data-preset="instrument-di">
-                <strong>DI Instrument</strong>
-                <p>Cleaner path for guitar, bass, or keys.</p>
-              </button>
-              <button class="quick-start-card" data-preset="podcast-clean">
-                <strong>Podcast Voice</strong>
-                <p>Speech-focused cleanup with minimal tuning.</p>
-              </button>
+              <div class="brand-note">
+                <span class="status-label">Studio Focus</span>
+                <p>Studio Current stays lean like a utility-first DAW, with fast startup, practical routing, and a professional vocal workflow.</p>
+              </div>
+
+              <div class="quick-start-stack">
+                <button class="quick-start-card" data-preset="clean-vocal">
+                  <strong>Lead Vocal</strong>
+                  <p>Balanced chain for modern vocal sessions.</p>
+                </button>
+                <button class="quick-start-card" data-preset="pop-tune">
+                  <strong>Pop Hard Tune</strong>
+                  <p>Tighter retune behavior and a brighter tone.</p>
+                </button>
+                <button class="quick-start-card" data-preset="instrument-di">
+                  <strong>DI Instrument</strong>
+                  <p>Cleaner path for guitar, bass, or keys.</p>
+                </button>
+                <button class="quick-start-card" data-preset="podcast-clean">
+                  <strong>Podcast Voice</strong>
+                  <p>Speech-focused cleanup with minimal tuning.</p>
+                </button>
+              </div>
             </div>
           </section>
 
@@ -182,6 +194,19 @@
               <span>Live monitor through channel strip</span>
             </label>
 
+            <div class="monitor-panel">
+              <div class="monitor-row">
+                <span class="status-label">Monitor Path</span>
+                <strong id="monitor-status">Live 72%</strong>
+              </div>
+              <label class="slider-field">
+                <span>Monitor level</span>
+                <input type="range" id="monitor-level" min="0" max="100" value="72" />
+                <output id="monitor-level-value">72%</output>
+              </label>
+              <p class="helper-text">Use headphones for live monitoring so the mic does not feed back into the speakers.</p>
+            </div>
+
             <div class="meter-block">
               <div class="meter-header">
                 <span>Input meter</span>
@@ -189,6 +214,25 @@
               </div>
               <div class="meter-track">
                 <div id="level-fill" class="meter-fill"></div>
+              </div>
+            </div>
+
+            <div class="session-stats">
+              <div class="session-stat">
+                <span class="status-label">Input mode</span>
+                <strong>Mono record</strong>
+              </div>
+              <div class="session-stat">
+                <span class="status-label">Monitor</span>
+                <strong>Processed</strong>
+              </div>
+              <div class="session-stat">
+                <span class="status-label">Output cue</span>
+                <strong>Main phones</strong>
+              </div>
+              <div class="session-stat">
+                <span class="status-label">Latency goal</span>
+                <strong>Low</strong>
               </div>
             </div>
           </section>
@@ -201,27 +245,29 @@
               <h2>Arrangement and edit timeline</h2>
             </div>
 
-            <div class="signature-stage" aria-hidden="true">
-              <div class="wave-crown">
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="arrangement-toolbar">
+              <div class="arrangement-metrics">
+                <div class="arrangement-badge">
+                  <span class="status-label">Song</span>
+                  <strong>Current DAW</strong>
+                </div>
+                <div class="arrangement-badge">
+                  <span class="status-label">Position</span>
+                  <strong>1.1.00</strong>
+                </div>
+                <div class="arrangement-badge">
+                  <span class="status-label">Loop</span>
+                  <strong>8 bars</strong>
+                </div>
+                <div class="arrangement-badge">
+                  <span class="status-label">Snap</span>
+                  <strong>1/4 beat</strong>
+                </div>
               </div>
-              <div class="signature-lockup">
-                <strong class="signature-current">CURRENT DAW</strong>
-                <span class="signature-daw">Light. Fast. Session-ready.</span>
+              <div class="arrangement-status">
+                <span class="status-label">Arrangement View</span>
+                <p>Playlist lanes, clip drops, and rack playback stay visible like a workstation instead of a marketing page.</p>
               </div>
-              <div class="signature-glow signature-glow-left"></div>
-              <div class="signature-glow signature-glow-right"></div>
             </div>
 
             <div class="timeline-ruler">
@@ -341,6 +387,21 @@
               Clean Vocal keeps the chain balanced so most singers can record immediately without fighting the software.
             </p>
 
+            <div class="channel-header">
+              <div class="channel-badge">
+                <span class="status-label">Input</span>
+                <strong>Lead Vox</strong>
+              </div>
+              <div class="channel-badge">
+                <span class="status-label">Insert path</span>
+                <strong>6 modules</strong>
+              </div>
+              <div class="channel-badge">
+                <span class="status-label">Tune mode</span>
+                <strong>Scale aware</strong>
+              </div>
+            </div>
+
             <div class="control-list">
               <label class="slider-field">
                 <span>Noise gate</span>
@@ -442,30 +503,54 @@
               <a class="primary-button inline-link" href="./library.html">Open Library</a>
             </div>
 
-            <div class="plugin-cards">
-              <div class="plugin-card">
-                <strong>Velvet Gate</strong>
-                <p>Utility cleanup at the top of the chain.</p>
+            <div class="insert-rack">
+              <div class="insert-slot">
+                <span class="slot-index">IN 1</span>
+                <div class="slot-meta">
+                  <strong>Velvet Gate</strong>
+                  <p>Utility cleanup at the top of the chain.</p>
+                </div>
+                <button class="secondary-button insert-toggle" type="button">On</button>
               </div>
-              <div class="plugin-card">
-                <strong>Silk De-Esser</strong>
-                <p>Tames consonants before they get harsh.</p>
+              <div class="insert-slot">
+                <span class="slot-index">IN 2</span>
+                <div class="slot-meta">
+                  <strong>Silk De-Esser</strong>
+                  <p>Tames consonants before they get harsh.</p>
+                </div>
+                <button class="secondary-button insert-toggle" type="button">On</button>
               </div>
-              <div class="plugin-card">
-                <strong>Pitch Pilot</strong>
-                <p>Scale-aware tuning guidance with retune control.</p>
+              <div class="insert-slot">
+                <span class="slot-index">IN 3</span>
+                <div class="slot-meta">
+                  <strong>Pitch Pilot</strong>
+                  <p>Scale-aware tuning guidance with retune control.</p>
+                </div>
+                <button class="secondary-button insert-toggle" type="button">On</button>
               </div>
-              <div class="plugin-card">
-                <strong>Condenser Air</strong>
-                <p>Adds brightness and expensive-sounding presence.</p>
+              <div class="insert-slot">
+                <span class="slot-index">IN 4</span>
+                <div class="slot-meta">
+                  <strong>Condenser Air</strong>
+                  <p>Adds brightness and expensive-sounding presence.</p>
+                </div>
+                <button class="secondary-button insert-toggle" type="button">On</button>
               </div>
-              <div class="plugin-card">
-                <strong>Tube Glow</strong>
-                <p>Soft drive and harmonic edge for leads.</p>
+              <div class="insert-slot">
+                <span class="slot-index">IN 5</span>
+                <div class="slot-meta">
+                  <strong>Tube Glow</strong>
+                  <p>Soft drive and harmonic edge for leads.</p>
+                </div>
+                <button class="secondary-button insert-toggle" type="button">On</button>
               </div>
-              <div class="plugin-card">
-                <strong>Room Bloom</strong>
-                <p>Space and polish for fast demo sessions.</p>
+              <div class="insert-slot">
+                <span class="slot-index">IN 6</span>
+                <div class="slot-meta">
+                  <strong>Room Bloom</strong>
+                  <p>Space and polish for fast demo sessions.</p>
+                </div>
+                <button class="secondary-button insert-toggle" type="button">On</button>
               </div>
             </div>
           </section>
