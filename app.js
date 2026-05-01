@@ -2,10 +2,16 @@ const elements = {
   deviceSelect: document.querySelector("#input-device"),
   connectButton: document.querySelector("#connect-button"),
   refreshButton: document.querySelector("#refresh-button"),
+  inputProfileButtons: Array.from(document.querySelectorAll(".input-scene")),
+  inputProfileSummary: document.querySelector("#input-profile-summary"),
   monitorToggle: document.querySelector("#monitor-toggle"),
   monitorLevel: document.querySelector("#monitor-level"),
   monitorLevelValue: document.querySelector("#monitor-level-value"),
   monitorStatus: document.querySelector("#monitor-status"),
+  inputModeStat: document.querySelector("#input-mode-stat"),
+  monitorTypeStat: document.querySelector("#monitor-type-stat"),
+  outputCueStat: document.querySelector("#output-cue-stat"),
+  latencyStat: document.querySelector("#latency-stat"),
   statusText: document.querySelector("#status-text"),
   pitchText: document.querySelector("#pitch-text"),
   recordButton: document.querySelector("#record-button"),
@@ -80,6 +86,7 @@ const audioState = {
   lastTakeUrl: null,
   animationFrame: null,
   pitchBlend: 0.58,
+  activeProfile: null,
 };
 
 const sequencerState = {
@@ -119,6 +126,94 @@ const tuningState = {
 let recordingStart = 0;
 let selectedPreset = "clean-vocal";
 let hasRecordedTake = false;
+let selectedInputProfile = "vocal-mic";
+
+const inputProfiles = {
+  "vocal-mic": {
+    label: "Vocal Mic",
+    summary: "Vocal Mic is ready for a mono microphone through your interface with processed live monitoring.",
+    assistant: "Use Vocal Mic for singing, rap, and spoken voice through an interface preamp. Keep the source close and monitor through headphones.",
+    preset: "clean-vocal",
+    channelMode: "mono",
+    channelCount: 1,
+    latency: "Low",
+    monitor: "Processed",
+    cue: "Main phones",
+    highPass: 95,
+    airBias: 1,
+    deessBias: 1,
+  },
+  "guitar-di": {
+    label: "Guitar DI",
+    summary: "Guitar DI keeps the path mono and cleaner for direct electric guitar or amp-modeler feeds.",
+    assistant: "Use Guitar DI for instrument-level sources through your interface. Start clean, then build tone with the rack and mixer.",
+    preset: "instrument-di",
+    channelMode: "mono",
+    channelCount: 1,
+    latency: "Low",
+    monitor: "Processed",
+    cue: "Main phones",
+    highPass: 70,
+    airBias: 0.55,
+    deessBias: 0.2,
+  },
+  "bass-di": {
+    label: "Bass DI",
+    summary: "Bass DI holds onto low-end and keeps vocal-style brightening out of the way for bass tracking.",
+    assistant: "Use Bass DI when the instrument needs weight more than sparkle. The chain backs off the airy top and keeps monitoring solid.",
+    preset: "instrument-di",
+    channelMode: "mono",
+    channelCount: 1,
+    latency: "Low",
+    monitor: "Processed",
+    cue: "Main phones",
+    highPass: 42,
+    airBias: 0.35,
+    deessBias: 0.1,
+  },
+  "keys-stereo": {
+    label: "Keys Stereo",
+    summary: "Keys Stereo asks for two channels when available so hardware keyboards and workstations feel more natural.",
+    assistant: "Use Keys Stereo for stereo outputs from keyboards, synths, or pianos. Monitoring stays wider and the chain stays cleaner.",
+    preset: "instrument-di",
+    channelMode: "stereo",
+    channelCount: 2,
+    latency: "Balanced",
+    monitor: "Stereo line",
+    cue: "Main phones",
+    highPass: 35,
+    airBias: 0.4,
+    deessBias: 0.05,
+  },
+  "drum-machine": {
+    label: "Drum Machine",
+    summary: "Drum Machine is tuned for stereo aux feeds from grooveboxes, samplers, and external beat makers.",
+    assistant: "Use Drum Machine for stereo aux outputs from drum gear. The path avoids vocal-style shaping so transients stay punchy.",
+    preset: "instrument-di",
+    channelMode: "stereo",
+    channelCount: 2,
+    latency: "Balanced",
+    monitor: "Stereo line",
+    cue: "Main phones",
+    highPass: 28,
+    airBias: 0.25,
+    deessBias: 0,
+  },
+  "aux-line": {
+    label: "Aux Line",
+    summary: "Aux Line is the general stereo utility path for interfaces, mixers, samplers, and external playback rigs.",
+    assistant: "Use Aux Line for any general-purpose stereo feed that should stay clean and easy to monitor without vocal cleanup getting in the way.",
+    preset: "instrument-di",
+    channelMode: "stereo",
+    channelCount: 2,
+    latency: "Balanced",
+    monitor: "Stereo line",
+    cue: "Main phones",
+    highPass: 30,
+    airBias: 0.3,
+    deessBias: 0,
+  },
+};
 
 const presets = {
   "clean-vocal": {
@@ -190,6 +285,56 @@ function updateMonitorState() {
 
   if (audioState.monitorGain && audioState.context) {
     audioState.monitorGain.gain.setTargetAtTime(enabled ? level : 0, audioState.context.currentTime, 0.01);
+  }
+}
+
+function getSelectedInputProfile() {
+  return inputProfiles[selectedInputProfile] || inputProfiles["vocal-mic"];
+}
+
+function updateInputProfileUI() {
+  const profile = getSelectedInputProfile();
+  elements.inputProfileButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.inputProfile === selectedInputProfile);
+  });
+
+  if (elements.inputProfileSummary) {
+    elements.inputProfileSummary.textContent = profile.summary;
+  }
+
+  if (elements.inputModeStat) {
+    elements.inputModeStat.textContent = profile.channelMode === "stereo" ? "Stereo record" : "Mono record";
+  }
+
+  if (elements.monitorTypeStat) {
+    elements.monitorTypeStat.textContent = profile.monitor;
+  }
+
+  if (elements.outputCueStat) {
+    elements.outputCueStat.textContent = profile.cue;
+  }
+
+  if (elements.latencyStat) {
+    elements.latencyStat.textContent = profile.latency;
+  }
+}
+
+function applyInputProfile(profileName, options = {}) {
+  const profile = inputProfiles[profileName];
+  if (!profile) {
+    return;
+  }
+
+  selectedInputProfile = profileName;
+  updateInputProfileUI();
+
+  if (options.syncPreset !== false && profile.preset && profile.preset !== selectedPreset) {
+    applyPreset(profile.preset);
+    return;
+  }
+
+  if (!options.quiet && elements.assistantText) {
+    elements.assistantText.textContent = profile.assistant;
   }
 }
 
@@ -601,6 +746,8 @@ function applyEffectSettings() {
     return;
   }
 
+  const profile = getSelectedInputProfile();
+
   const gateValue = Number(elements.controls.gate.value) / 100;
   const deessValue = Number(elements.controls.deess.value) / 100;
   const pitchValue = Number(elements.controls.pitch.value) / 100;
@@ -617,11 +764,11 @@ function applyEffectSettings() {
   audioState.pitchBlend = tuneIntensity;
 
   if (audioState.deessFilter) {
-    audioState.deessFilter.gain.value = -14 * deessValue;
+    audioState.deessFilter.gain.value = -14 * deessValue * profile.deessBias;
   }
 
   if (audioState.airFilter) {
-    audioState.airFilter.gain.value = 10 * airValue;
+    audioState.airFilter.gain.value = 10 * airValue * profile.airBias;
   }
 
   if (audioState.compressor) {
@@ -685,12 +832,14 @@ async function connectInput() {
     teardownAudio();
 
     const deviceId = elements.deviceSelect.value;
+    const profile = getSelectedInputProfile();
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: {
         deviceId: deviceId ? { exact: deviceId } : undefined,
         echoCancellation: false,
         noiseSuppression: false,
         autoGainControl: false,
+        channelCount: { ideal: profile.channelCount },
       },
     });
 
@@ -698,7 +847,7 @@ async function connectInput() {
     const source = context.createMediaStreamSource(stream);
     const highPass = context.createBiquadFilter();
     highPass.type = "highpass";
-    highPass.frequency.value = 95;
+    highPass.frequency.value = profile.highPass;
 
     const gateGain = context.createGain();
     const deessFilter = context.createBiquadFilter();
@@ -756,13 +905,15 @@ async function connectInput() {
     audioState.outputGain = outputGain;
     audioState.monitorGain = monitorGain;
     audioState.mediaRecorder = mediaRecorder;
+    audioState.activeProfile = profile.label;
 
     applyEffectSettings();
     applyMixerState();
     updateMonitorState();
     startVisualization();
     updateStatus("Input connected");
-    elements.assistantText.textContent = "Levels and headphone monitoring are live now. Do a short test phrase, set monitor level, then hit Record when the meter feels healthy.";
+    elements.assistantText.textContent = `${profile.label} is live now. Set monitor level, test the source, and then record when the meter feels healthy.`;
+    updateInputProfileUI();
     updateWorkflowUI();
     await listDevices();
   } catch (error) {
@@ -975,6 +1126,11 @@ function attachEvents() {
 
   elements.monitorToggle.addEventListener("change", updateMonitorState);
   elements.monitorLevel.addEventListener("input", updateMonitorState);
+  elements.inputProfileButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      applyInputProfile(button.dataset.inputProfile);
+    });
+  });
 
   elements.bpmControl.addEventListener("input", () => {
     sequencerState.bpm = Number(elements.bpmControl.value);
@@ -1158,6 +1314,7 @@ async function init() {
   buildTimelineGrid();
   updateOutputLabels();
   attachEvents();
+  applyInputProfile(selectedInputProfile, { quiet: true });
   applyPreset(selectedPreset);
   updateMonitorState();
   elements.bpmValue.textContent = String(sequencerState.bpm);

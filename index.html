@@ -184,6 +184,40 @@
               <select id="input-device"></select>
             </label>
 
+            <div class="input-profile-panel">
+              <div class="section-heading compact-heading">
+                <p class="section-kicker">Input Profile</p>
+                <h2>Source routing</h2>
+              </div>
+              <div class="input-scene-grid">
+                <button class="input-scene active" type="button" data-input-profile="vocal-mic">
+                  <strong>Vocal Mic</strong>
+                  <span>Mono mic chain for singing and speech.</span>
+                </button>
+                <button class="input-scene" type="button" data-input-profile="guitar-di">
+                  <strong>Guitar DI</strong>
+                  <span>Instrument input with cleaner top end.</span>
+                </button>
+                <button class="input-scene" type="button" data-input-profile="bass-di">
+                  <strong>Bass DI</strong>
+                  <span>Lower-pass tracking for bass or synth bass.</span>
+                </button>
+                <button class="input-scene" type="button" data-input-profile="keys-stereo">
+                  <strong>Keys Stereo</strong>
+                  <span>Stereo line path for keyboards and workstations.</span>
+                </button>
+                <button class="input-scene" type="button" data-input-profile="drum-machine">
+                  <strong>Drum Machine</strong>
+                  <span>Stereo aux path for beat boxes and grooveboxes.</span>
+                </button>
+                <button class="input-scene" type="button" data-input-profile="aux-line">
+                  <strong>Aux Line</strong>
+                  <span>General stereo line-in for samplers and playback rigs.</span>
+                </button>
+              </div>
+              <p class="helper-text" id="input-profile-summary">Vocal Mic is ready for a mono microphone through your interface with processed live monitoring.</p>
+            </div>
+
             <div class="button-row">
               <button id="connect-button" class="primary-button">Connect Input</button>
               <button id="refresh-button" class="secondary-button">Refresh</button>
@@ -220,19 +254,19 @@
             <div class="session-stats">
               <div class="session-stat">
                 <span class="status-label">Input mode</span>
-                <strong>Mono record</strong>
+                <strong id="input-mode-stat">Mono record</strong>
               </div>
               <div class="session-stat">
                 <span class="status-label">Monitor</span>
-                <strong>Processed</strong>
+                <strong id="monitor-type-stat">Processed</strong>
               </div>
               <div class="session-stat">
                 <span class="status-label">Output cue</span>
-                <strong>Main phones</strong>
+                <strong id="output-cue-stat">Main phones</strong>
               </div>
               <div class="session-stat">
                 <span class="status-label">Latency goal</span>
-                <strong>Low</strong>
+                <strong id="latency-stat">Low</strong>
               </div>
             </div>
           </section>

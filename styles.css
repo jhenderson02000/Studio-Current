@@ -472,6 +472,7 @@ input[type="range"] {
 
 .browser-stack,
 .browser-group,
+.input-profile-panel,
 .monitor-panel,
 .arrangement-toolbar,
 .channel-header,
@@ -484,6 +485,12 @@ input[type="range"] {
 .browser-list {
   display: grid;
   gap: 6px;
+}
+
+.input-scene-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
 }
 
 .browser-item {
@@ -500,6 +507,36 @@ input[type="range"] {
 .browser-item.is-active {
   border-color: rgba(124, 174, 255, 0.35);
   background: linear-gradient(180deg, rgba(124, 174, 255, 0.16), rgba(124, 174, 255, 0.05));
+}
+
+.input-scene {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  text-align: left;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.input-scene strong {
+  display: block;
+  font-size: 0.88rem;
+}
+
+.input-scene span {
+  color: var(--muted);
+  font-size: 0.79rem;
+  line-height: 1.35;
+}
+
+.input-scene.active {
+  border-color: rgba(124, 174, 255, 0.35);
+  background:
+    linear-gradient(180deg, rgba(124, 174, 255, 0.18), rgba(124, 174, 255, 0.06)),
+    rgba(255, 255, 255, 0.02);
 }
 
 .monitor-panel {
@@ -1007,5 +1044,12 @@ button:disabled {
 
   .mixer-strips {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .input-scene-grid,
+  .session-stats,
+  .arrangement-metrics,
+  .channel-header {
+    grid-template-columns: 1fr;
   }
 }
