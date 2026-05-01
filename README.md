@@ -24,6 +24,10 @@ Then open:
 
 `http://127.0.0.1:4173`
 
+Current public deployment:
+
+`https://studio-current.vercel.app`
+
 ## Deploy
 
 Primary deployment path:
