@@ -4,6 +4,8 @@ const elements = {
   refreshButton: document.querySelector("#refresh-button"),
   inputProfileButtons: Array.from(document.querySelectorAll(".input-scene")),
   inputProfileSummary: document.querySelector("#input-profile-summary"),
+  trackInputSelects: Array.from(document.querySelectorAll(".track-input-select")),
+  trackArmButtons: Array.from(document.querySelectorAll(".track-arm-button")),
   monitorToggle: document.querySelector("#monitor-toggle"),
   monitorLevel: document.querySelector("#monitor-level"),
   monitorLevelValue: document.querySelector("#monitor-level-value"),
@@ -12,6 +14,7 @@ const elements = {
   monitorTypeStat: document.querySelector("#monitor-type-stat"),
   outputCueStat: document.querySelector("#output-cue-stat"),
   latencyStat: document.querySelector("#latency-stat"),
+  channelInputName: document.querySelector("#channel-input-name"),
   statusText: document.querySelector("#status-text"),
   pitchText: document.querySelector("#pitch-text"),
   recordButton: document.querySelector("#record-button"),
@@ -73,6 +76,7 @@ const elements = {
 const audioState = {
   stream: null,
   context: null,
+  highPassFilter: null,
   analyser: null,
   gateGain: null,
   deessFilter: null,
@@ -127,6 +131,13 @@ let recordingStart = 0;
 let selectedPreset = "clean-vocal";
 let hasRecordedTake = false;
 let selectedInputProfile = "vocal-mic";
+
+const trackState = {
+  lead: { name: "Track 1", typeLabel: "Audio Track 1", profile: "vocal-mic", armed: true },
+  beat: { name: "Track 2", typeLabel: "Audio Track 2", profile: "drum-machine", armed: false },
+  bass: { name: "Track 3", typeLabel: "Audio Track 3", profile: "guitar-di", armed: false },
+  fx: { name: "Track 4", typeLabel: "Audio Track 4", profile: "aux-line", armed: false },
+};
 
 const inputProfiles = {
   "vocal-mic": {
@@ -274,13 +285,14 @@ function updateTuneSummary() {
 function updateMonitorState() {
   const level = Number(elements.monitorLevel?.value || 0) / 100;
   const enabled = Boolean(elements.monitorToggle?.checked);
+  const [, armedTrack] = getArmedTrackEntry();
 
   if (elements.monitorLevelValue) {
     elements.monitorLevelValue.textContent = `${Math.round(level * 100)}%`;
   }
 
   if (elements.monitorStatus) {
-    elements.monitorStatus.textContent = enabled ? `Live ${Math.round(level * 100)}%` : "Monitor off";
+    elements.monitorStatus.textContent = enabled ? `${armedTrack.name} live ${Math.round(level * 100)}%` : `${armedTrack.name} monitor off`;
   }
 
   if (audioState.monitorGain && audioState.context) {
@@ -290,6 +302,72 @@ function updateMonitorState() {
 
 function getSelectedInputProfile() {
   return inputProfiles[selectedInputProfile] || inputProfiles["vocal-mic"];
+}
+
+function getArmedTrackEntry() {
+  const armedEntry = Object.entries(trackState).find(([, track]) => track.armed);
+  return armedEntry || ["lead", trackState.lead];
+}
+
+function updateTrackRoutingUI() {
+  Object.entries(trackState).forEach(([trackId, track]) => {
+    const profile = inputProfiles[track.profile];
+    const nameNode = document.querySelector(`[data-track-name="${trackId}"]`);
+    const typeNode = document.querySelector(`[data-track-type="${trackId}"]`);
+    const armButton = elements.trackArmButtons.find((button) => button.dataset.track === trackId);
+    const inputSelect = elements.trackInputSelects.find((select) => select.dataset.track === trackId);
+    const meta = document.querySelector(`[data-track-meta="${trackId}"]`);
+
+    if (nameNode) {
+      nameNode.textContent = track.name;
+    }
+
+    if (typeNode) {
+      typeNode.textContent = `${track.typeLabel} · ${profile.label}`;
+    }
+
+    if (armButton) {
+      armButton.classList.toggle("active", track.armed);
+      armButton.textContent = track.armed ? "Armed" : "Arm";
+    }
+
+    if (inputSelect) {
+      inputSelect.value = track.profile;
+    }
+
+    if (meta) {
+      meta.classList.toggle("armed", track.armed);
+    }
+  });
+
+  const [, armedTrack] = getArmedTrackEntry();
+  const armedProfile = inputProfiles[armedTrack.profile];
+
+  if (elements.channelInputName) {
+    elements.channelInputName.textContent = armedTrack.name;
+  }
+
+  const vocalStripName = document.querySelector('[data-strip-name="vocal"]');
+  const vocalStripType = document.querySelector('[data-strip-type="vocal"]');
+  if (vocalStripName) {
+    vocalStripName.textContent = armedTrack.name;
+  }
+  if (vocalStripType) {
+    vocalStripType.textContent = `Armed · ${armedProfile.label}`;
+  }
+}
+
+function armTrack(trackId) {
+  if (!trackState[trackId]) {
+    return;
+  }
+
+  Object.keys(trackState).forEach((key) => {
+    trackState[key].armed = key === trackId;
+  });
+
+  updateTrackRoutingUI();
+  applyInputProfile(trackState[trackId].profile);
 }
 
 function updateInputProfileUI() {
@@ -317,6 +395,8 @@ function updateInputProfileUI() {
   if (elements.latencyStat) {
     elements.latencyStat.textContent = profile.latency;
   }
+
+  updateTrackRoutingUI();
 }
 
 function applyInputProfile(profileName, options = {}) {
@@ -330,11 +410,19 @@ function applyInputProfile(profileName, options = {}) {
 
   if (options.syncPreset !== false && profile.preset && profile.preset !== selectedPreset) {
     applyPreset(profile.preset);
-    return;
   }
 
   if (!options.quiet && elements.assistantText) {
     elements.assistantText.textContent = profile.assistant;
+  }
+
+  if (audioState.highPassFilter && audioState.context) {
+    audioState.highPassFilter.frequency.setTargetAtTime(profile.highPass, audioState.context.currentTime, 0.02);
+  }
+
+  if (audioState.context) {
+    applyEffectSettings();
+    updateMonitorState();
   }
 }
 
@@ -801,6 +889,7 @@ function teardownAudio() {
 
   audioState.stream = null;
   audioState.context = null;
+  audioState.highPassFilter = null;
   audioState.analyser = null;
   audioState.gateGain = null;
   audioState.deessFilter = null;
@@ -896,6 +985,7 @@ async function connectInput() {
 
     audioState.stream = stream;
     audioState.context = context;
+    audioState.highPassFilter = highPass;
     audioState.analyser = analyser;
     audioState.gateGain = gateGain;
     audioState.deessFilter = deessFilter;
@@ -912,7 +1002,7 @@ async function connectInput() {
     updateMonitorState();
     startVisualization();
     updateStatus("Input connected");
-    elements.assistantText.textContent = `${profile.label} is live now. Set monitor level, test the source, and then record when the meter feels healthy.`;
+    elements.assistantText.textContent = `${profile.label} is live on ${getArmedTrackEntry()[1].name}. Set monitor level, test the source, and then record when the meter feels healthy.`;
     updateInputProfileUI();
     updateWorkflowUI();
     await listDevices();
@@ -922,9 +1012,19 @@ async function connectInput() {
   }
 }
 
+function placeRecordedTakeClip() {
+  const [armedTrackId, armedTrack] = getArmedTrackEntry();
+  const slots = Array.from(document.querySelectorAll(`.timeline-row[data-lane="${armedTrackId}"] .timeline-slot`));
+  const targetSlot = slots.find((slot) => !slot.querySelector(".timeline-clip")) || slots[0];
+  if (targetSlot) {
+    placeClip(targetSlot, `${armedTrack.name} Take`);
+  }
+}
+
 function finalizeRecording() {
   const blob = new Blob(audioState.recordingChunks, { type: "audio/webm" });
   audioState.recordingChunks = [];
+  const [, armedTrack] = getArmedTrackEntry();
 
   if (audioState.lastTakeUrl) {
     URL.revokeObjectURL(audioState.lastTakeUrl);
@@ -933,6 +1033,7 @@ function finalizeRecording() {
   audioState.lastTakeUrl = URL.createObjectURL(blob);
   elements.takeAudio.src = audioState.lastTakeUrl;
   elements.downloadLink.href = audioState.lastTakeUrl;
+  elements.downloadLink.download = `${armedTrack.name.toLowerCase().replace(/\s+/g, "-")}-take.webm`;
   elements.takeEmpty.classList.add("hidden");
   elements.takePlayer.classList.remove("hidden");
   elements.playLastButton.disabled = false;
@@ -941,7 +1042,8 @@ function finalizeRecording() {
   elements.timerText.textContent = "Take captured. Review or download it below.";
   updateStatus("Take ready");
   hasRecordedTake = true;
-  elements.assistantText.textContent = "Nice. Play back the take, then adjust one control at a time so it stays easy to dial in.";
+  placeRecordedTakeClip();
+  elements.assistantText.textContent = `${armedTrack.name} captured cleanly. Play it back, then adjust one control at a time so it stays easy to dial in.`;
   updateWorkflowUI();
 }
 
@@ -954,12 +1056,13 @@ function startRecording() {
   audioState.recordingChunks = [];
   recordingStart = performance.now();
   hasRecordedTake = false;
+  const [, armedTrack] = getArmedTrackEntry();
   audioState.mediaRecorder.start();
   elements.recordButton.disabled = true;
   elements.stopButton.disabled = false;
-  elements.timerText.textContent = "Recording... keep the performance steady.";
-  updateStatus("Recording");
-  elements.assistantText.textContent = "Recording is live. Focus on performance first and ignore the controls until the take is done.";
+  elements.timerText.textContent = `Recording ${armedTrack.name}... keep the performance steady.`;
+  updateStatus(`Recording ${armedTrack.name}`);
+  elements.assistantText.textContent = `${armedTrack.name} is armed and recording. Focus on the performance first and ignore the controls until the take is done.`;
   updateWorkflowUI();
 }
 
@@ -1128,7 +1231,29 @@ function attachEvents() {
   elements.monitorLevel.addEventListener("input", updateMonitorState);
   elements.inputProfileButtons.forEach((button) => {
     button.addEventListener("click", () => {
+      const [armedTrackId] = getArmedTrackEntry();
+      trackState[armedTrackId].profile = button.dataset.inputProfile;
+      updateTrackRoutingUI();
       applyInputProfile(button.dataset.inputProfile);
+    });
+  });
+  elements.trackInputSelects.forEach((select) => {
+    select.addEventListener("change", () => {
+      const trackId = select.dataset.track;
+      if (!trackState[trackId]) {
+        return;
+      }
+
+      trackState[trackId].profile = select.value;
+      updateTrackRoutingUI();
+      if (trackState[trackId].armed) {
+        applyInputProfile(select.value);
+      }
+    });
+  });
+  elements.trackArmButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      armTrack(button.dataset.track);
     });
   });
 
@@ -1316,6 +1441,7 @@ async function init() {
   attachEvents();
   applyInputProfile(selectedInputProfile, { quiet: true });
   applyPreset(selectedPreset);
+  updateTrackRoutingUI();
   updateMonitorState();
   elements.bpmValue.textContent = String(sequencerState.bpm);
   elements.stripFaders.forEach((fader) => {

@@ -575,6 +575,12 @@ input[type="range"] {
   background: rgba(255, 255, 255, 0.025);
 }
 
+.lane-title,
+.track-routing {
+  display: grid;
+  gap: 6px;
+}
+
 .arrangement-toolbar {
   margin-bottom: 10px;
 }
@@ -610,7 +616,30 @@ input[type="range"] {
   display: grid;
   grid-template-columns: 160px 1fr;
   gap: 10px;
-  align-items: center;
+  align-items: stretch;
+}
+
+.lane-meta.armed {
+  border-color: rgba(124, 174, 255, 0.34);
+  box-shadow: inset 0 0 0 1px rgba(124, 174, 255, 0.12);
+}
+
+.track-routing select {
+  min-width: 0;
+}
+
+.track-arm-button {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.2));
+  color: var(--text);
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.track-arm-button.active {
+  border-color: rgba(239, 118, 110, 0.42);
+  background: linear-gradient(180deg, rgba(239, 118, 110, 0.24), rgba(239, 118, 110, 0.08));
 }
 
 .timeline-row {
@@ -812,6 +841,13 @@ input[type="range"] {
 .strip-name,
 .strip-readout {
   font-size: 0.78rem;
+}
+
+.strip-type {
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-align: center;
+  line-height: 1.3;
 }
 
 .strip-toggle.active {

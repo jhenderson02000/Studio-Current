@@ -325,30 +325,82 @@
 
             <div class="playlist-lanes">
               <div class="playlist-lane">
-                <div class="lane-meta">
-                  <strong>Lead Vocal</strong>
-                  <span>Audio 1</span>
+                <div class="lane-meta" data-track-meta="lead">
+                  <div class="lane-title">
+                    <strong data-track-name="lead">Lead Vocal</strong>
+                    <span data-track-type="lead">Audio Track 1 · Vocal Mic</span>
+                  </div>
+                  <div class="track-routing">
+                    <select class="track-input-select" data-track="lead" aria-label="Lead Vocal input profile">
+                      <option value="vocal-mic">Vocal Mic</option>
+                      <option value="guitar-di">Guitar DI</option>
+                      <option value="bass-di">Bass DI</option>
+                      <option value="keys-stereo">Keys Stereo</option>
+                      <option value="drum-machine">Drum Machine</option>
+                      <option value="aux-line">Aux Line</option>
+                    </select>
+                    <button class="track-arm-button active" type="button" data-track="lead">Armed</button>
+                  </div>
                 </div>
                 <div class="timeline-row" data-lane="lead"></div>
               </div>
               <div class="playlist-lane">
-                <div class="lane-meta">
-                  <strong>Beat Rack</strong>
-                  <span>Pattern 1</span>
+                <div class="lane-meta" data-track-meta="beat">
+                  <div class="lane-title">
+                    <strong data-track-name="beat">Beat Rack</strong>
+                    <span data-track-type="beat">Pattern Track · Drum Machine</span>
+                  </div>
+                  <div class="track-routing">
+                    <select class="track-input-select" data-track="beat" aria-label="Beat Rack input profile">
+                      <option value="vocal-mic">Vocal Mic</option>
+                      <option value="guitar-di">Guitar DI</option>
+                      <option value="bass-di">Bass DI</option>
+                      <option value="keys-stereo">Keys Stereo</option>
+                      <option value="drum-machine" selected>Drum Machine</option>
+                      <option value="aux-line">Aux Line</option>
+                    </select>
+                    <button class="track-arm-button" type="button" data-track="beat">Arm</button>
+                  </div>
                 </div>
                 <div class="timeline-row" data-lane="beat"></div>
               </div>
               <div class="playlist-lane">
-                <div class="lane-meta">
-                  <strong>Bass</strong>
-                  <span>Pattern 2</span>
+                <div class="lane-meta" data-track-meta="bass">
+                  <div class="lane-title">
+                    <strong data-track-name="bass">Instrument DI</strong>
+                    <span data-track-type="bass">Audio Track 2 · Guitar DI</span>
+                  </div>
+                  <div class="track-routing">
+                    <select class="track-input-select" data-track="bass" aria-label="Instrument DI input profile">
+                      <option value="vocal-mic">Vocal Mic</option>
+                      <option value="guitar-di" selected>Guitar DI</option>
+                      <option value="bass-di">Bass DI</option>
+                      <option value="keys-stereo">Keys Stereo</option>
+                      <option value="drum-machine">Drum Machine</option>
+                      <option value="aux-line">Aux Line</option>
+                    </select>
+                    <button class="track-arm-button" type="button" data-track="bass">Arm</button>
+                  </div>
                 </div>
                 <div class="timeline-row" data-lane="bass"></div>
               </div>
               <div class="playlist-lane">
-                <div class="lane-meta">
-                  <strong>FX</strong>
-                  <span>Audio 2</span>
+                <div class="lane-meta" data-track-meta="fx">
+                  <div class="lane-title">
+                    <strong data-track-name="fx">Stereo Aux</strong>
+                    <span data-track-type="fx">Audio Track 3 · Aux Line</span>
+                  </div>
+                  <div class="track-routing">
+                    <select class="track-input-select" data-track="fx" aria-label="Stereo Aux input profile">
+                      <option value="vocal-mic">Vocal Mic</option>
+                      <option value="guitar-di">Guitar DI</option>
+                      <option value="bass-di">Bass DI</option>
+                      <option value="keys-stereo">Keys Stereo</option>
+                      <option value="drum-machine">Drum Machine</option>
+                      <option value="aux-line" selected>Aux Line</option>
+                    </select>
+                    <button class="track-arm-button" type="button" data-track="fx">Arm</button>
+                  </div>
                 </div>
                 <div class="timeline-row" data-lane="fx"></div>
               </div>
@@ -424,7 +476,7 @@
             <div class="channel-header">
               <div class="channel-badge">
                 <span class="status-label">Input</span>
-                <strong>Lead Vox</strong>
+                <strong id="channel-input-name">Lead Vocal</strong>
               </div>
               <div class="channel-badge">
                 <span class="status-label">Insert path</span>
@@ -615,37 +667,43 @@
 
           <div class="mixer-strips" id="mixer-strips">
             <div class="mixer-strip" data-strip="vocal">
-              <span class="strip-name">Vocal</span>
+              <span class="strip-name" data-strip-name="vocal">Lead Vocal</span>
+              <span class="strip-type" data-strip-type="vocal">Armed · Vocal Mic</span>
               <button class="strip-toggle active" data-action="mute">Mute</button>
               <input class="strip-fader" data-strip="vocal" type="range" min="0" max="100" value="92" orient="vertical" />
               <span class="strip-readout" data-readout="vocal">92%</span>
             </div>
             <div class="mixer-strip" data-strip="kick">
-              <span class="strip-name">Kick</span>
+              <span class="strip-name" data-strip-name="kick">Kick</span>
+              <span class="strip-type" data-strip-type="kick">Pattern · Drum Rack</span>
               <button class="strip-toggle active" data-action="mute">Mute</button>
               <input class="strip-fader" data-strip="kick" type="range" min="0" max="100" value="84" orient="vertical" />
               <span class="strip-readout" data-readout="kick">84%</span>
             </div>
             <div class="mixer-strip" data-strip="snare">
-              <span class="strip-name">Snare</span>
+              <span class="strip-name" data-strip-name="snare">Snare</span>
+              <span class="strip-type" data-strip-type="snare">Pattern · Backbeat</span>
               <button class="strip-toggle active" data-action="mute">Mute</button>
               <input class="strip-fader" data-strip="snare" type="range" min="0" max="100" value="76" orient="vertical" />
               <span class="strip-readout" data-readout="snare">76%</span>
             </div>
             <div class="mixer-strip" data-strip="hat">
-              <span class="strip-name">Hat</span>
+              <span class="strip-name" data-strip-name="hat">Hat</span>
+              <span class="strip-type" data-strip-type="hat">Pattern · Hats</span>
               <button class="strip-toggle active" data-action="mute">Mute</button>
               <input class="strip-fader" data-strip="hat" type="range" min="0" max="100" value="62" orient="vertical" />
               <span class="strip-readout" data-readout="hat">62%</span>
             </div>
             <div class="mixer-strip" data-strip="keys">
-              <span class="strip-name">Keys</span>
+              <span class="strip-name" data-strip-name="keys">Keys</span>
+              <span class="strip-type" data-strip-type="keys">Pattern · Synth Chord</span>
               <button class="strip-toggle active" data-action="mute">Mute</button>
               <input class="strip-fader" data-strip="keys" type="range" min="0" max="100" value="68" orient="vertical" />
               <span class="strip-readout" data-readout="keys">68%</span>
             </div>
             <div class="mixer-strip" data-strip="master">
-              <span class="strip-name">Master</span>
+              <span class="strip-name" data-strip-name="master">Master</span>
+              <span class="strip-type" data-strip-type="master">Stereo bus</span>
               <button class="strip-toggle active" data-action="mute">Mute</button>
               <input class="strip-fader" data-strip="master" type="range" min="0" max="100" value="88" orient="vertical" />
               <span class="strip-readout" data-readout="master">88%</span>
