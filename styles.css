@@ -217,6 +217,16 @@ audio {
   color: var(--muted);
 }
 
+.status-link {
+  color: var(--text);
+  text-decoration: none;
+}
+
+.status-link:hover,
+.status-link:focus-visible {
+  text-decoration: underline;
+}
+
 .divider {
   width: 1px;
   min-height: 32px;
