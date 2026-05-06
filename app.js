@@ -1,5 +1,6 @@
 const elements = {
   deviceSelect: document.querySelector("#input-device"),
+  deviceHelp: document.querySelector("#input-device-help"),
   connectButton: document.querySelector("#connect-button"),
   refreshButton: document.querySelector("#refresh-button"),
   inputProfileButtons: Array.from(document.querySelectorAll(".input-scene")),
@@ -261,6 +262,12 @@ const presets = {
 
 function updateStatus(text) {
   elements.statusText.textContent = text;
+}
+
+function updateDeviceHelp(text) {
+  if (elements.deviceHelp) {
+    elements.deviceHelp.textContent = text;
+  }
 }
 
 function updateOutputLabels() {
@@ -798,20 +805,25 @@ function createTubeCurve(amount) {
 async function listDevices() {
   if (!navigator.mediaDevices?.enumerateDevices) {
     updateStatus("Media devices unavailable");
+    updateDeviceHelp("This browser cannot list audio devices here. Try a current version of Chrome or Edge.");
     return;
   }
 
   try {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const inputs = devices.filter((device) => device.kind === "audioinput");
+    const previousValue = elements.deviceSelect.value;
     elements.deviceSelect.innerHTML = "";
 
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Default browser input / interface";
+    elements.deviceSelect.append(defaultOption);
+
     if (!inputs.length) {
-      const option = document.createElement("option");
-      option.value = "";
-      option.textContent = "No input devices found";
-      elements.deviceSelect.append(option);
-      elements.connectButton.disabled = true;
+      elements.connectButton.disabled = false;
+      updateStatus("Grant mic access to list interfaces");
+      updateDeviceHelp("If your interface is not listed yet, click Connect Input, allow microphone access, then press Refresh.");
       return;
     }
 
@@ -822,9 +834,15 @@ async function listDevices() {
       elements.deviceSelect.append(option);
     });
 
+    if (previousValue && inputs.some((device) => device.deviceId === previousValue)) {
+      elements.deviceSelect.value = previousValue;
+    }
+
     elements.connectButton.disabled = false;
+    updateDeviceHelp("Choose your interface input, or leave the browser default input selected and click Connect Input.");
   } catch (error) {
     updateStatus("Device list blocked");
+    updateDeviceHelp("The browser blocked the device list. Allow microphone access, then press Refresh.");
     console.error(error);
   }
 }
@@ -1003,11 +1021,13 @@ async function connectInput() {
     startVisualization();
     updateStatus("Input connected");
     elements.assistantText.textContent = `${profile.label} is live on ${getArmedTrackEntry()[1].name}. Set monitor level, test the source, and then record when the meter feels healthy.`;
+    updateDeviceHelp(`Connected. If this is not the right interface, press Refresh and choose a different input device.`);
     updateInputProfileUI();
     updateWorkflowUI();
     await listDevices();
   } catch (error) {
-    updateStatus("Permission denied or interface busy");
+    updateStatus("Mic permission or interface busy");
+    updateDeviceHelp("Allow microphone access in the browser and in Windows Privacy > Microphone, then try Connect Input again.");
     console.error(error);
   }
 }
